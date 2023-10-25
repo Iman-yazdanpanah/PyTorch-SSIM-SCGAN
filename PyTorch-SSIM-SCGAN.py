@@ -19,8 +19,7 @@ from skimage.metrics import structural_similarity as ssim
 
 
 os.makedirs("images/static/", exist_ok=True)
-os.makedirs("images/varying_c1/", exist_ok=True)
-os.makedirs("images/varying_c2/", exist_ok=True)
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--n_epochs", type=int, default=25, help="number of epochs of training")
@@ -181,15 +180,7 @@ def sample_image(n_row, batches_done):
     static_sample = generator(z, static_label, static_code)
     save_image(static_sample.data, "images/static/%d.png" % batches_done, nrow=n_row, normalize=True)
 
-    # Get varied c1 and c2
-    zeros = np.zeros((n_row ** 2, 1))
-    c_varied = np.repeat(np.linspace(-1, 1, n_row)[:, np.newaxis], n_row, 0)
-    c1 = Variable(FloatTensor(np.concatenate((c_varied, zeros), -1)))
-    c2 = Variable(FloatTensor(np.concatenate((zeros, c_varied), -1)))
-    sample1 = generator(static_z, static_label, c1)
-    sample2 = generator(static_z, static_label, c2)
-    save_image(sample1.data, "images/varying_c1/%d.png" % batches_done, nrow=n_row, normalize=True)
-    save_image(sample2.data, "images/varying_c2/%d.png" % batches_done, nrow=n_row, normalize=True)
+    
 
 
 # ----------
